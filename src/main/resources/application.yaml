@@ -1,0 +1,32 @@
+smallrye:
+  config:
+    mapping:
+      validate-unknown: false # ignore unknown config properties
+
+quarkus:
+  hibernate-orm:
+    database:
+      default-schema: outbox
+    log:
+      sql: true
+      bind-parameters: true
+
+  flyway:
+    migrate-at-start: true
+    schemas: ${quarkus.hibernate-orm.database.default-schema}
+
+  log:
+    min-level: TRACE
+    level: INFO
+    console:
+      format: '%d{yyyy-MM-dd HH:mm:ss,S} %-5p %X{correlationId} - [%c{3.}] (%t) %s%e%n'
+    category:
+      "com.acme":
+        level: DEBUG
+
+acme:
+  outbox:
+    poll-interval: 5s
+    batch-size: 50
+    max-retry: 3
+    retry-exponent: 2.0
